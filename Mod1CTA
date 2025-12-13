@@ -1,0 +1,20 @@
+//============================================================================
+// Name        : Mod1CriticalThinking.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : CSC450-1 Critical Thinking Module 1
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+int main() {
+
+	string Person[5] = {"Bilbo","Baggins","Bagshot Row","Hobbiton","3472"};
+
+	for(int i =0;i<sizeof(Person);i++){
+		cout << Person[i] << "\n" << endl;
+	}
+	return 0;
+}

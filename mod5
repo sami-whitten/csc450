@@ -1,0 +1,66 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm> // Required for the reverse function
+
+using namespace std;
+
+int main() {
+    string userInput;
+    string line;
+    string fullContent;
+    string fileName = "CSC450_CT5_mod5.txt";
+    string rfileName = "ReverseText.txt";
+    ofstream of;
+    fstream f;
+    
+    // 1. Changed cin >> to getline to handle full names with spaces
+    cout << "Enter your name: " << endl;
+    getline(cin, userInput);
+    
+    of.open(fileName, ios::app);
+    if(!of)
+        cout << "Error, file not found";
+    else {
+        of << userInput << endl; // Added endl for better formatting
+        cout << "File successfully appended\n";
+        of.close();
+    }
+    
+    // 2. Fix: Use f.open() instead of treating 'f' like a function
+    f.open(fileName); 
+    if(!f)
+        cout << "Error, file not found";
+    else {
+        string temp;
+        while(getline(f, temp)){
+            fullContent += temp + "\n";
+        }
+        f.close(); // 3. Added missing semicolon
+    }
+    
+    // 4. Fix: Corrected reverse syntax (fullContent.begin() instead of fullContent,begin())
+    reverse(fullContent.begin(), fullContent.end());
+    
+    ofstream rf(rfileName, ios::app);
+    if(!rf)
+        cout << "Error, file not found";
+    else {
+        rf << fullContent;
+        rf.close();
+    }
+    
+    cout << "\n---------Current Content of " << rfileName << "---------\n";
+    ifstream readBack(rfileName);
+    if(!readBack)
+        cout << "Error, file not found";
+    else {
+        while(getline(readBack, line)){
+            cout << line << endl;
+        }
+        readBack.close();
+    }
+    
+    return 0;
+}
+

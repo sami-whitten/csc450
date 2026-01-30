@@ -1,0 +1,47 @@
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+using namespace std;
+
+class Counter{
+    private:
+        mutex mtx;
+        condition_variable cv;
+        bool ready = false;
+        const int maxCount = 20;
+    
+    public:
+        void countUp(){
+            {
+                lock_guard<mutex> lock(mtx);
+                for(int i = 1; i < maxCount; i++){
+                    cout << "Thread 1: " << i << "\n";
+                }
+                ready = true;
+            }
+            cv.notify_one();
+        }
+        
+        void countDown(){
+            unique_lock<mutex> lock(mtx);
+            cv.wait(lock, [this] {return ready; });
+            
+            for(int i = maxCount; i >= 0; --i){
+                cout << "Thread 2: " << i << "\n";
+            }
+        }
+};
+
+int main(){
+    
+    Counter c; 
+    
+    thread t1(&Counter::countUp, &c);
+    thread t2(&Counter::countDown, &c);
+    
+    t1.join();
+    t2.join();
+
+    return 0;
+}
